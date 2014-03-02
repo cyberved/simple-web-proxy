@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import requests
+import re
 
 from lxml.html.clean import Cleaner
 from flask import Flask
@@ -17,8 +18,10 @@ cleaner.style = True
 
 @app.route('/view/<path:url>')
 def viewpage(url):
-    r = requests.get(str(url))
-    return cleaner.clean_html(r.content)
+    if re.match(r'^https?://\w.+$', url):
+        r = requests.get(str(url))
+        return cleaner.clean_html(r.content)
+    return "Invalid URL."
 
 
 if __name__ == '__main__':
