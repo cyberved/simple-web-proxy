@@ -1,8 +1,8 @@
 #!/usr/bin/python2
 # coding: utf-8
 
-import requests
 import re
+import urllib2
 
 from lxml.html.clean import Cleaner
 from flask import Flask, request, render_template, flash, redirect, url_for
@@ -85,12 +85,13 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route('/view/<path:url>')
+@app.route('/f')
 @login_required
-def viewpage(url):
+def fetch():
+    url = request.args.get('url', '')
     if re.match(r'^https?://\w.+$', url):
-        r = requests.get(str(url))
-        return cleaner.clean_html(r.content)
+        html = urllib2.urlopen(url).read()
+        return cleaner.clean_html(html)
     return "Invalid URL."
 
 
