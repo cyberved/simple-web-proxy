@@ -1,5 +1,17 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<p>Hello.</p>
+{% if current_user.is_authenticated() %}
+<form method=POST action="">
+  <div>
+    <input type="text" id="req_url" name="req_url" placeholder="Enter URL" required>
+  </div>
+  <div>
+    <button type="submit">Go</button>
+  </div>
+</form>
+{% else %}
+<p>Welcome.</p>
+<a href="{{ url_for('login') }}">SIGN IN</a>
+{% endif %}
 {% endblock %}

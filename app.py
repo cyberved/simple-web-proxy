@@ -50,11 +50,6 @@ def load_user(id):
     return USERS.get(int(id))
 
 
-@app.route('/')
-def index():
-    return render_template("index.html")
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated():
@@ -83,6 +78,14 @@ def logout():
     logout_user()
     flash("Logged out.")
     return redirect(url_for("index"))
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'GET':
+        return render_template("index.html")
+    url = request.form['req_url']
+    return redirect(url_for('fetch', url=url))
 
 
 @app.route('/f')
